@@ -34,8 +34,41 @@ public class NumberRangeSummarizerImplementation implements NumberRangeSummarize
      */
     @Override
     public String summarizeCollection(Collection<Integer> input) {
-        return "TODO: Implement this method";
+        if (input == null || input.isEmpty()) {
+            return "";
+        }
+        List<Integer> numbers = new ArrayList<>(input);
+        Collections.sort(numbers);
 
+        StringBuilder sb = new StringBuilder();
+        int rangeStart = numbers.get(0);
+        int previous = rangeStart;
+
+        for (int i = 1; i < numbers.size(); i++) {
+            int current = numbers.get(i);
+            if (current == previous + 1) {
+                // sequence, move on
+                previous = current;
+            } else {
+                // not sequential, close previous range
+                appendRange(sb, rangeStart, previous);
+                sb.append(", ");
+                rangeStart = current;
+                previous = current;
+            }
+        }
+        // Add the last range/number
+        appendRange(sb, rangeStart, previous);
+
+        return sb.toString();
+    }
+
+    private void appendRange(StringBuilder sb, int start, int end) {
+        if (start == end) {
+            sb.append(start);
+        } else {
+            sb.append(start).append("-").append(end);
+        }
     }
 
 
